@@ -9,25 +9,28 @@ const observer = new ResizeObserver((entries) => {
   width = canvas.clientWidth;
   height = canvas.clientHeight;
 });
-observer.observe(canvas)
 
-const hsla = (h, s, l, a) => `hsla(${h * 360}, ${s * 100}%, ${l * 100}%, ${a})`;
-let last = 0;
+function hsl(h) {
+  if (h==-1) return "hsla(0,100%,0%,1)";
+  return `hsla(${h*360}, 100%, 50%, 1)`;
+}
 
 function disc(radius, val, dial) {
-  ctx.fillStyle = hsla(val, 1, 0.5, 1);
+  ctx.fillStyle = hsl(val);
   ctx.beginPath();
   ctx.arc(0, 0, radius, 0, 2*Math.PI, 0);
   ctx.fill();
   if (dial) {
-    ctx.lineWidth = radius/10;
+    ctx.fillStyle = hsl(-1);
     ctx.beginPath();
-    ctx.moveTo(0,0);
-    ctx.lineTo(radius*Math.sin(val*2*Math.PI),
-              -radius*Math.cos(val*2*Math.PI));
-    ctx.stroke();
+    ctx.arc(radius*Math.sin(val*2*Math.PI)*.87,
+           -radius*Math.cos(val*2*Math.PI)*.87,
+           radius/10, 0, 2*Math.PI, 0);
+    ctx.fill();
   }
 }
+
+let last = 0;
 
 function render(time) {
   canvas.width = width;
@@ -40,7 +43,7 @@ function render(time) {
     ctx.save();
     ctx.translate(width / 2, height / 2);
 
-    ctx.fillStyle = hsla(0, 1, 0, 1);
+    ctx.fillStyle = hsl(-1);
     ctx.beginPath();
     ctx.arc(0, 0, Math.max(width, height), 0, 2*Math.PI, 0);
     ctx.fill();
@@ -54,4 +57,6 @@ function render(time) {
   }
   requestAnimationFrame(render)
 }
+
+observer.observe(canvas)
 requestAnimationFrame(render)

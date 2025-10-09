@@ -25,7 +25,7 @@ function disc(radius, val, dial) {
     ctx.beginPath();
     ctx.arc(radius*Math.sin(val*2*Math.PI)*.87,
            -radius*Math.cos(val*2*Math.PI)*.87,
-           radius/10, 0, 2*Math.PI, 0);
+            radius/10, 0, 2*Math.PI, 0);
     ctx.fill();
   }
 }
@@ -39,16 +39,12 @@ function render(time) {
   if (Date.now() != last) {
     last = Date.now();
     const now = new Date(last);
+    const range = Math.min(width, height) * 0.8;
 
     ctx.save();
     ctx.translate(width / 2, height / 2);
 
-    ctx.fillStyle = hsl(-1);
-    ctx.beginPath();
-    ctx.arc(0, 0, Math.max(width, height), 0, 2*Math.PI, 0);
-    ctx.fill();
-  
-    const range = Math.min(width, height) * 0.8;
+    disc(Math.max(width, height), -1,  0);
     disc(range/2, now.getMinutes()/60, 0);
     disc(range/3, now.getSeconds()/60, 1);
     disc(range/4, now.getHours()/12,   0);

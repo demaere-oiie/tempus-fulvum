@@ -36,6 +36,8 @@ function lunar(now) {
     return (phase > 14.765 ? (phase / 14.765) : (phase / 14.765));
 }
 var last = 0;
+var lastDate = 0;
+var phase = 0;
 function render(time) {
     canvas.width = width;
     canvas.height = height;
@@ -43,13 +45,17 @@ function render(time) {
         last = Date.now();
         var now = new Date(last);
         var range = Math.min(width, height) * 0.8;
+        if (lastDate != now.getDate()) {
+            lastDate = now.getDate();
+            phase = lunar(now);
+        }
         ctx.save();
         ctx.translate(width / 2, height / 2);
         disc(Math.max(width, height), 0, 0.0, false);
         disc(range / 2, now.getMinutes() / 60, 0.5, false);
         disc(range / 3, now.getSeconds() / 60, 0.5, true);
         disc(range / 4, now.getHours() / 12, 0.5, false);
-        disc(range / 24, now.getHours() / 12, lunar(now), false);
+        disc(range / 24, now.getHours() / 12, phase, false);
         ctx.restore();
     }
     requestAnimationFrame(render);

@@ -43,6 +43,8 @@ function lunar(now:Date):number {
 }
 
 let last = 0;
+let lastDate = 0;
+let phase = 0;
 
 function render(time:number) {
   canvas.width = width;
@@ -53,6 +55,11 @@ function render(time:number) {
     const now = new Date(last);
     const range = Math.min(width, height) * 0.8;
 
+    if (lastDate != now.getDate()) {
+        lastDate = now.getDate();
+        phase = lunar(now);
+    }
+
     ctx.save();
     ctx.translate(width / 2, height / 2);
 
@@ -60,7 +67,7 @@ function render(time:number) {
     disc(range/2, now.getMinutes()/60, 0.5, false);
     disc(range/3, now.getSeconds()/60, 0.5, true);
     disc(range/4, now.getHours()/12,   0.5, false);
-    disc(range/24, now.getHours()/12, lunar(now), false);
+    disc(range/24, now.getHours()/12,  phase, false);
   
     ctx.restore();
   }

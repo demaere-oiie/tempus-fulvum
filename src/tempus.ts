@@ -39,7 +39,7 @@ function lunar(now:Date):number {
   const off = (daynum(now.getFullYear(),now.getMonth(),now.getDate()) -
                daynum(2000,1,6));
   const phase = off % 29.53;
-  return (phase > 14.765 ? (phase/14.765) : (phase/14.765));
+  return (phase > 14.765 ? ((29.53-phase)/14.765) : (phase/14.765));
 }
 
 let last = 0;
@@ -58,6 +58,7 @@ function render(time:number) {
     if (lastDate != now.getDate()) {
         lastDate = now.getDate();
         phase = lunar(now);
+        console.log(phase);
     }
 
     ctx.save();
